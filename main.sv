@@ -44,6 +44,7 @@ module ntt8_top (
         .v(v)
     );
 
+
     always_comb begin
         case (stage)
             2'd0: begin
@@ -59,6 +60,7 @@ module ntt8_top (
             2'd2: begin
                 addr_a = j;
                 addr_b = j + 3'd4;
+
             end
 
             default: begin
@@ -116,6 +118,10 @@ module ntt8_top (
                                 stage <= 2'd1;
                                 group <= 2'd0;
                                 j     <= 2'd0;
+                                $display("Stage 1:");
+                                for (i = 0; i < 8; i = i + 1) begin
+                                    $display("out[%0d] = %0d", i, mem[i]);
+                                end
                             end 
                             else begin
                                 group <= group + 2'd1;
@@ -128,6 +134,10 @@ module ntt8_top (
                                     stage <= 2'd2;
                                     group <= 2'd0;
                                     j     <= 2'd0;
+                                    $display("Stage 2:");
+                                    for (i = 0; i < 8; i = i + 1) begin
+                                        $display("out[%0d] = %0d", i, mem[i]);
+                                    end
                                 end 
                                 else begin
                                     group <= group + 2'd1;
