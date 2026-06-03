@@ -80,7 +80,7 @@ module ntt_top #(
                     b_cnt <= 0;
                     if (start) begin
                         for (int i = 0; i < N; i++) begin
-                            mem[bitrev(LOG_N'(i))] <= in_data[i];
+                            mem[i] <= in_data[bitrev(LOG_N'(i))];
                         end
                         state <= RUN;
                     end
