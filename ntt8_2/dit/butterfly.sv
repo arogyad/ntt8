@@ -7,15 +7,15 @@ parameter logic [2:0] WIDTH = 3'd5
     output logic [WIDTH - 1:0] u,
     output logic [WIDTH - 1:0] v
 );
-    localparam logic [WIDTH - 1:0] Q = 5'd17;
-    localparam logic [WIDTH:0]   Q_EXT = 6'd17;
+    localparam logic [WIDTH - 1:0] Q = 17;
+    localparam logic [WIDTH:0]   Q_EXT = 17;
 
     logic [WIDTH * 2 - 1:0] p;  
     logic [WIDTH - 1:0]   mod_mul;  
     logic [WIDTH:0]     sum;  
 
     logic [WIDTH:0] reducer = 1 << WIDTH; // this is the R
-    logic [WIDTH:0] r_inv = 6'd8; // R^-1, calculated this using FLT a^{p - 2} (mod 17)
+    logic [WIDTH:0] r_inv = 8; // R^-1, calculated this using FLT a^{p - 2} (mod 17)
     logic [WIDTH:0] k = ((reducer * r_inv) - 1) / Q_EXT; // st R.R^-1 - q.k = 1 
 
     logic [WIDTH - 1:0] b_;
@@ -44,7 +44,7 @@ parameter logic [2:0] WIDTH = 3'd5
         // p = b * w;
         // mod_mul = WIDTH'( p % (WIDTH*2)'(Q) );
         b_ = convert_in(b);
-        w_ = convert_in(w);
+        w_ = convert_in(w); // can probably do this in the twiddle factor
         p = b_ * w_;
         temp = WIDTH'(((p & ((2 * WIDTH)'(reducer - 1))) * k) & ((2*WIDTH)'(reducer - 1)));
         sum_full = {1'b0, p} + {1'b0, ((2*WIDTH)'(temp) * (2*WIDTH)'(Q_EXT))};
