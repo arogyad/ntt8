@@ -7,8 +7,8 @@ module butterfly #(
     output logic [WIDTH - 1:0] u,
     output logic [WIDTH - 1:0] v
 );
-    localparam logic [WIDTH - 1:0] Q = 5'd17;
-    localparam logic [WIDTH:0]   Q_EXT = 6'd17; 
+    localparam logic [WIDTH - 1:0] Q = 17;
+    localparam logic [WIDTH:0]   Q_EXT = 17; 
 
     logic [WIDTH:0]     sum;
     logic [WIDTH - 1:0]   diff;

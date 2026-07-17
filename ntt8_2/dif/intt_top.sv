@@ -1,4 +1,4 @@
-module ntt_top #( 
+module intt_top #( 
     parameter logic [3:0] N = 4'd8,
     parameter logic [2:0] LOG_N = 3'd3,
     parameter logic [2:0] WIDTH = 3'd5
@@ -25,7 +25,7 @@ module ntt_top #(
     logic [LOG_N - 1:0] addr_a, addr_b;
     logic [LOG_N - 1:0] group_start, offset;
 
-    butterfly bfly(
+    intt_butterfly bfly(
         .a(a),
         .b(b),
         .w(w),
@@ -33,14 +33,14 @@ module ntt_top #(
         .v(v)
     );
 
-    twiddle tw_rom (
+    intt_twiddle tw_rom (
         .stage(stage),
         .j(offset),
         .w(w)
     );
 
     function automatic [LOG_N - 1:0] bitrev(input [LOG_N - 1:0] x);
-        logic [LOG_N-1:0] res;
+        logic [LOG_N - 1:0] res;
         for (int k = 0; k < LOG_N; k++) begin
             res[k] = x[LOG_N - 1 - LOG_N'(k)];
         end
@@ -48,12 +48,12 @@ module ntt_top #(
     endfunction
 
     always_comb begin
-        stride = 3'd1 << (LOG_N - 1 - stage);
+        stride = 3'd1 << stage;
     end
 
     always_comb begin
-        group_start = (b_cnt & ~(stride - LOG_N'(1))) << LOG_N'(1);
-        offset = b_cnt & (stride - LOG_N'(1));
+        group_start = (b_cnt & ~(stride - LOG_N'(1))) << LOG_N'(1); // (b_cnt / stride) * (2 * stride)
+        offset = b_cnt & (stride - LOG_N'(1)); // b_cnt % stride
     end
 
     always_comb begin
@@ -86,8 +86,6 @@ module ntt_top #(
                     end
                 end
                 RUN: begin
-                    // $display("addr_a: %0d, addr_b: %0d", addr_a, addr_b);
-                    
                     mem[addr_a] <= u;
                     mem[addr_b] <= v;
 
@@ -109,8 +107,7 @@ module ntt_top #(
 
                 FINISH: begin
                     for(int i = 0; i < N; i++) begin
-                        // out_data[i] <= mem[bitrev(LOG_N'(i))];
-                        out_data[i] <= mem[i];
+                        out_data[i] <= WIDTH'( (mem[i] * 15) % 17 );
                     end
                     done <= 1'b1;
                     state <= IDLE;
