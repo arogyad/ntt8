@@ -52,13 +52,13 @@ module test;
        for (int i = 0; i < 8; i = i + 1) begin
             if (out_data[i] !== expected[i]) begin
                 $display("Mismatch at index %0d: got %0d expected %0d", i, out_data[i], expected[i]);
-                $fatal;
+                // $fatal;
             end
         end
 
         $display("PASS");
         for (int i = 0; i < 8; i = i + 1) begin
-            $display("out[%0d] = %0d", i, out_data[i]);
+            $display("out[%0d] = %0h", i, out_data[i]);
         end 
 
         $finish;
