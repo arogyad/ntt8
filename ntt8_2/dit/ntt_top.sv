@@ -14,7 +14,7 @@ module ntt_top #(
     state_t state;
 
     logic [LOG_N - 1:0] stage;
-    logic [LOG_N - 1:0] b_cnt; // b_cnt could be only logic [LOG_N - 2:0] b_cnt to save 1 bit? but would be hassle to check below :/
+    logic [LOG_N - 1:0] b_cnt;
 
 
     logic [WIDTH - 1:0] mem[0: N - 1];
@@ -52,8 +52,8 @@ module ntt_top #(
     end
 
     always_comb begin
-        group_start = (b_cnt & ~(stride - LOG_N'(1))) << LOG_N'(1);
-        offset = b_cnt & (stride - LOG_N'(1));
+        group_start = (b_cnt & ~(stride - LOG_N'(1))) << LOG_N'(1); // (b_cnt / stride) * (2 * stride)
+        offset = b_cnt & (stride - LOG_N'(1)); // b_cnt % stride
     end
 
     always_comb begin
