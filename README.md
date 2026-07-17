@@ -31,6 +31,8 @@ iverilog -g2012 -o ntt8 main.sv butterfly.sv twiddle.sv test.sv
 vvp ntt8
 ```
 
+[EDIT: /ntt8_2 contains DIT and DIF parameterized version of NTT algorithm.]
+
 ## Reference
 
 I found the following reading very helpful to understand NTT:
